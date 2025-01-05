@@ -1,0 +1,5 @@
+const projectName = "MRAA Call For Entries Dashboard"
+const ownerName = "James Green"
+const supportEmail = "tech@metrorichmondart.org"
+const version = "0.0.2"
+const copyright = "Copyright 2025"
