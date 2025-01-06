@@ -23,6 +23,4 @@ function route(path) {
    return result
 }
 
-function getCurrentExhibitionsResponse() {
-   return MRAACommon.getOpenCalls()
-}
+

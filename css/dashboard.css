@@ -11,11 +11,11 @@
 }
 
 .dashboard-hdr {
-    background-color: #183527;
+    background-color: lightslategray;
     min-height: 4vmax;
     padding: 15px 0;
     margin-bottom: 20px;
-    color: rgb(236, 232, 225);
+    color: white;
     text-align: center;
 }
 
