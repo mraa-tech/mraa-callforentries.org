@@ -633,6 +633,9 @@ img.crop {
 	color: #fd03c6;
 	font-weight: bold;
 }
+tfoot {
+	font-weight: bold;
+}
 .line-up {
   animation: 2s anim-lineUp ease-out infinite;
 }

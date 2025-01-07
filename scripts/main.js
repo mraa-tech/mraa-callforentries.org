@@ -4,13 +4,25 @@ const EP_DASHBOARD =
    "?q="
 
 function fetchCurrentExhibitions() {
-   const yr = new Date().getFullYear()
+   //const yr = new Date().getFullYear()
    const url = EP_DASHBOARD + "currentexhibitions"
    fetch(url)
       .then((resp) => resp.json())
       .then((resp) => {
          t = resp
-         testShowCurrentExhibitions(resp)
+         showCurrentExhibitions(resp)
+      })
+      .catch()
+}
+
+function fetchTotalsByExhibitName() {
+   //const yr = new Date().getFullYear()
+   const url = EP_DASHBOARD + "totalsbyexhibitname"
+   fetch(url)
+      .then((resp) => resp.json())
+      .then((resp) => {
+         t = resp
+         showTotalsByExhibitName(resp)
       })
       .catch()
 }
@@ -21,7 +33,7 @@ function showYear() {
    ele.innerText = yr
 }
 
-function testShowCurrentExhibitions(arr) {
+function showCurrentExhibitions(arr) {
    const ele = document.getElementById("currentexhibitions")
    document.getElementById("loadingcurrentexhibitions").remove()
    ele.innerHTML = ""
@@ -77,49 +89,60 @@ function testShowCurrentExhibitions(arr) {
    }
 }
 
-function showCurrentExhibitions(arr) {
-   const ele = document.getElementById("currentexhibitions")
-   document.getElementById("loadingcurrentexhibitions").remove()
+function showTotalsByExhibitName(arr) {
+   const ele = document.getElementById("paymentsrecorded")
+   document.getElementById("loadingpaymentsrecorded").remove()
    const schema = {
-      Name: 0,
-      Entries: 1,
+      "Exhibit Title": 0,
+      "Last Name": 1,
+      "First Name": 2,
+      Entries: 3,
+      "Amount Paid": 4,
    }
 
-   if (arr.length <= 0) {
-      ele.innerHTML = "All calls have closed"
-   } else {
-      //build table
-      const table = document.createElement("table")
-
-      //create headers
-      const headers = Object.keys(schema)
-      const thead = document.createElement("thead")
-      const hrow = document.createElement("tr")
-      headers.forEach((h) => {
-         let hdr = document.createElement("th")
-         hdr.innerText = h
-         hrow.append(hdr)
-      })
+   //build table
+   const table = document.createElement("table")
+   //create headers
+   const headers = Object.keys(schema)
+   //arr = arr.shift() // remove the headers
+   const thead = document.createElement("thead")
+   const hrow = document.createElement("tr")
+   headers.forEach((h) => {
+      let hdr = document.createElement("th")
+      hdr.innerText = h
+      hrow.append(hdr)
       thead.append(hrow)
       table.append(thead)
+   })
+   // create footer
+   const tfoot = document.createElement("tfoot")
 
-      //create body
-      const tbody = document.createElement("tbody")
-      arr.forEach((r) => {
-         let brow = document.createElement("tr")
-         r.shift() //remove the event id
-         r.forEach((c) => {
-            let cell = document.createElement("td")
-            cell.innerText = c
-            brow.append(cell)
-         })
-         tbody.append(brow)
+   //create body
+   const tbody = document.createElement("tbody")
+
+   arr.forEach((r, i) => {
+      let brow = document.createElement("tr")
+      r.forEach((c, i) => {
+         if (i === schema["Amount Paid"]) {
+            c = "$" + c
+         }
+         let cell = document.createElement("td")
+         cell.innerText = c
+         brow.append(cell)
       })
-      table.append(tbody)
+      if (i === arr.length - 1) {
+         tfoot.append(brow)
+      } else {
+         tbody.append(brow)
+      }
+   })
 
-      ele.append(table)
-      table.classList.add("table", "table-borderless")
-   }
+   table.append(tbody)
+   table.append(tfoot)
+   table.classList.add("table", "table-striped")
+   ele.append(table)
 }
+
 document.addEventListener("DOMContentLoaded", showYear)
 document.addEventListener("DOMContentLoaded", fetchCurrentExhibitions)
+document.addEventListener("DOMContentLoaded", fetchTotalsByExhibitName)
