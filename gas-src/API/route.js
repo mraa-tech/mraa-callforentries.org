@@ -4,6 +4,7 @@ const ROUTES = {
    },
 }
 ROUTES.path("currentexhibitions", getCurrentExhibitionsResponse)
+ROUTES.path("totalsbyexhibitname", getTotalsByExhibitNameResponse)
 
 function doGet(e) {
    let result = route(e.parameter["q"])
