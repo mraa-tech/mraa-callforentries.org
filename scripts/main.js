@@ -44,7 +44,7 @@ function showCurrentExhibitions(arr) {
       "Title",
       "Exhibit Location",
       "Call Closes",
-      "Submit an Entry",
+      "Call for Entries",
    ]
    const table = document.createElement("table")
    headers.forEach((h) => {
@@ -79,7 +79,8 @@ function showCurrentExhibitions(arr) {
          cell.innerHTML =
             "<a href='" +
             a.registrationlink +
-            "' target='_blank'>Call For Entry</a>"
+            "' target='_blank' class='btn btn-primary'>Enter the Show</a>"
+         // cell.classList.add("btn", "btn-primary", "mt-2")
          brow.append(cell)
          tbody.appendChild(brow)
       })
