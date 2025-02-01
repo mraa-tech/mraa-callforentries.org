@@ -6,12 +6,16 @@ const EP_DASHBOARD =
 const EP_DASHBOARD_TEST =
    "https://script.google.com/macros/s/AKfycbw-L_jwHLpTW1ltdQM-iBL69WVQbkhB55Jw0Ir0FkXQoW2pUm5YWXlMTTf0DBZZMooS/exec?q=openshows"
 
+const _calls = []
+const _shows = []
+
 function fetchOpenShows() {
    const url = EP_DASHBOARD + "openshows"
    fetch(url)
       .then((resp) => resp.json())
       .then((resp) => {
          t = resp
+         _shows.push(resp)
          showOpenShows(resp)
       })
       .catch()
@@ -23,6 +27,7 @@ function fetchCurrentExhibitions() {
       .then((resp) => resp.json())
       .then((resp) => {
          t = resp
+         _calls.push(resp)
          showCurrentExhibitions(resp)
       })
       .catch()
@@ -69,7 +74,7 @@ function showOpenShows(arr) {
    if (arr.length <= 0) {
       ele.innerHTML = "All shows have closed"
    } else {
-      arr.forEach((a) => {
+      arr.forEach((a, i) => {
          let brow = document.createElement("tr")
          let cell = document.createElement("td")
          cell.innerText = a.exhibittitle
@@ -80,7 +85,23 @@ function showOpenShows(arr) {
          cell = document.createElement("td")
          if (a.showdropoffdate !== "") {
             let date = new Date(a.showdropoffdate)
-            cell.innerHTML = date.toDateString()
+            cell.innerHTML = date.toLocaleDateString("en-us", {
+               weekday: "long",
+               month: "long",
+               day: "numeric",
+               year: "numeric",
+            })
+         }
+         brow.append(cell)
+         cell = document.createElement("td")
+         if (a.showpickupdate !== "") {
+            let date = new Date(a.showpickupdate)
+            cell.innerHTML = date.toLocaleDateString("en-us", {
+               weekday: "long",
+               month: "long",
+               day: "numeric",
+               year: "numeric",
+            })
          }
          brow.append(cell)
          tbody.appendChild(brow)
@@ -113,32 +134,45 @@ function showCurrentExhibitions(arr) {
    thead.appendChild(hrow)
    table.appendChild(thead)
 
-   if (arr.length <= 0) {
-      ele.innerHTML = "All calls have closed"
+   if (arr.length <= 0 || arr[0].columns) {
+      ele.innerHTML =
+         "<div class='fs-4 bg-dark text-info'>All calls have closed<div>"
    } else {
       arr.forEach((a) => {
          let brow = document.createElement("tr")
          let cell = document.createElement("td")
-         cell.innerText = a.exhibittitle
-         brow.append(cell)
-
-         cell = document.createElement("td")
-         cell.innerText = a.location
-         brow.append(cell)
-
-         cell = document.createElement("td")
-         if (a.cfeclosedate !== "") {
-            let date = new Date(a.cfeclosedate)
-            cell.innerHTML = date.toDateString()
+         if (a.exhibittitle) {
+            cell.innerText = a.exhibittitle
          }
          brow.append(cell)
 
          cell = document.createElement("td")
-         cell.innerHTML =
-            "<a href='" +
-            a.registrationlink +
-            "' target='_blank' class='btn btn-primary'>Enter the Show</a>"
-         // cell.classList.add("btn", "btn-primary", "mt-2")
+         if (a.location) {
+            cell.innerText = a.location
+         }
+         brow.append(cell)
+
+         cell = document.createElement("td")
+         if (a.cfeclosedate) {
+            let date = new Date(a.cfeclosedate)
+            cell.innerHTML = date.toLocaleDateString("en-us", {
+               weekday: "long",
+               month: "long",
+               day: "numeric",
+               year: "numeric",
+            })
+         } else {
+            cell.innerText = "Closed"
+         }
+         brow.append(cell)
+
+         cell = document.createElement("td")
+         if (a.registrationlink) {
+            cell.innerHTML =
+               "<a href='" +
+               a.registrationlink +
+               "' target='_blank' class='btn btn-primary'>Enter the Show</a>"
+         }
          brow.append(cell)
          tbody.appendChild(brow)
       })
