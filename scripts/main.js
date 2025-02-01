@@ -136,7 +136,7 @@ function showCurrentExhibitions(arr) {
 
    if (arr.length <= 0 || arr[0].columns) {
       ele.innerHTML =
-         "<div class='fs-4 bg-dark text-info'>All calls have closed<div>"
+         "<div class='fs-4 bg-dark text-info p-2 rounded'>All calls have closed<div>"
    } else {
       arr.forEach((a) => {
          let brow = document.createElement("tr")
