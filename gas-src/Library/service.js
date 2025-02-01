@@ -13,3 +13,8 @@ function getTotalsByExhibitNameResponse() {
    const data = MRAACommon.getTotalsByExhibitName()
    return data
 }
+
+function getOpenShowsResponse() {
+   const data = MRAACommon.getOpenShows()
+   return data
+}
