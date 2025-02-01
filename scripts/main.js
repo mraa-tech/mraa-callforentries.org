@@ -2,9 +2,22 @@
 const EP_DASHBOARD =
    "https://script.google.com/macros/s/AKfycbw-L_jwHLpTW1ltdQM-iBL69WVQbkhB55Jw0Ir0FkXQoW2pUm5YWXlMTTf0DBZZMooS/exec" +
    "?q="
+// test endpoint
+const EP_DASHBOARD_TEST =
+   "https://script.google.com/macros/s/AKfycbw-L_jwHLpTW1ltdQM-iBL69WVQbkhB55Jw0Ir0FkXQoW2pUm5YWXlMTTf0DBZZMooS/exec?q=openshows"
+
+function fetchOpenShows() {
+   const url = EP_DASHBOARD + "openshows"
+   fetch(url)
+      .then((resp) => resp.json())
+      .then((resp) => {
+         t = resp
+         showOpenShows(resp)
+      })
+      .catch()
+}
 
 function fetchCurrentExhibitions() {
-   //const yr = new Date().getFullYear()
    const url = EP_DASHBOARD + "currentexhibitions"
    fetch(url)
       .then((resp) => resp.json())
@@ -16,7 +29,6 @@ function fetchCurrentExhibitions() {
 }
 
 function fetchTotalsByExhibitName() {
-   //const yr = new Date().getFullYear()
    const url = EP_DASHBOARD + "totalsbyexhibitname"
    fetch(url)
       .then((resp) => resp.json())
@@ -31,6 +43,52 @@ function showYear() {
    const yr = new Date().getFullYear()
    const ele = document.getElementById("year")
    ele.innerText = yr
+}
+
+function showOpenShows(arr) {
+   const ele = document.getElementById("openshows")
+   document.getElementById("loadingopenshows").remove()
+   ele.innerHTML = ""
+   const thead = document.createElement("thead")
+   const hrow = document.createElement("tr")
+   const tbody = document.createElement("tbody")
+   const headers = [
+      "Title",
+      "Exhibit Location",
+      "Drop Off Date",
+      "Pick Up Date",
+   ]
+   const table = document.createElement("table")
+   headers.forEach((h) => {
+      const th = document.createElement("th")
+      th.innerText = h
+      hrow.appendChild(th)
+   })
+   thead.appendChild(hrow)
+   table.appendChild(thead)
+   if (arr.length <= 0) {
+      ele.innerHTML = "All shows have closed"
+   } else {
+      arr.forEach((a) => {
+         let brow = document.createElement("tr")
+         let cell = document.createElement("td")
+         cell.innerText = a.exhibittitle
+         brow.append(cell)
+         cell = document.createElement("td")
+         cell.innerText = a.location
+         brow.append(cell)
+         cell = document.createElement("td")
+         if (a.showdropoffdate !== "") {
+            let date = new Date(a.showdropoffdate)
+            cell.innerHTML = date.toDateString()
+         }
+         brow.append(cell)
+         tbody.appendChild(brow)
+      })
+      table.appendChild(tbody)
+      ele.appendChild(table)
+      table.classList.add("table", "table-striped")
+   }
 }
 
 function showCurrentExhibitions(arr) {
@@ -147,3 +205,4 @@ function showTotalsByExhibitName(arr) {
 document.addEventListener("DOMContentLoaded", showYear)
 document.addEventListener("DOMContentLoaded", fetchCurrentExhibitions)
 document.addEventListener("DOMContentLoaded", fetchTotalsByExhibitName)
+document.addEventListener("DOMContentLoaded", fetchOpenShows)
