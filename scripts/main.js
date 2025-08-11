@@ -71,8 +71,8 @@ function showOpenShows(arr) {
    })
    thead.appendChild(hrow)
    table.appendChild(thead)
-   if (arr.length <= 0) {
-      ele.innerHTML = "All shows have closed"
+   if (arr.length <= 0 || arr[0].columns) {
+      ele.innerHTML = "No exhibits are currently showing"
    } else {
       arr.forEach((a, i) => {
          let brow = document.createElement("tr")
