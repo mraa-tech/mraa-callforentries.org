@@ -71,7 +71,7 @@ function showOpenShows(arr) {
    })
    thead.appendChild(hrow)
    table.appendChild(thead)
-   if (arr[0].columns == "Values") {
+   if (arr.length <= 0 || arr[0].columns) {
       ele.innerHTML = "No exhibits are currently showing"
    } else {
       arr.forEach((a, i) => {
